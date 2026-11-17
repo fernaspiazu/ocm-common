@@ -48,6 +48,17 @@ const (
 	// HCPAutoscalerDefaultMaxFreeDifferenceRatio is the default maximum difference in free resources
 	// for two node groups to be considered similar (max_free_difference_ratio).
 	HCPAutoscalerDefaultMaxFreeDifferenceRatio = "0.1"
+
+	// HCPAutoscalerDefaultKubeClientQPS is the default maximum number of queries per second the
+	// autoscaler sends to the Kubernetes API server (kube_client_qps). Accepted values are between
+	// -1 and 1000, where -1 disables client side rate limiting and 0 leaves the client-go default
+	// of 5 queries per second in place.
+	HCPAutoscalerDefaultKubeClientQPS = 200
+
+	// HCPAutoscalerDefaultKubeClientBurst is the default maximum number of queries the autoscaler
+	// sends to the Kubernetes API server in a single burst, on top of the sustained rate given by
+	// kube_client_qps (kube_client_burst). Accepted values are between 1 and 2000.
+	HCPAutoscalerDefaultKubeClientBurst = 300
 )
 
 // HCPAutoscalerDefaultExpanders returns the default ordered list of scale up strategies (expanders).

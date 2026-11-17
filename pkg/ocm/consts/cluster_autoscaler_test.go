@@ -35,8 +35,15 @@ var _ = Describe("ROSA HCP cluster autoscaler defaults", func() {
 		})
 	})
 
-	Context("scale-down durations", func() {
-		DescribeTable("are whole seconds between 0s and 24h",
+	Context("scale down", func() {
+		It("enables scale down", func() {
+			// The HyperShift CEL rule on ClusterAutoscaling is
+			// "scaleDown can only be set when scaling is ScaleUpAndScaleDown", so the
+			// scale-down defaults below are only sendable while this default is true.
+			Expect(HCPAutoscalerDefaultScaleDownEnabled).To(BeTrue())
+		})
+
+		DescribeTable("durations are whole seconds between 0s and 24h",
 			func(value string) {
 				d := mustParseDuration(value)
 				Expect(d).To(BeNumerically(">=", 0))
@@ -58,6 +65,25 @@ var _ = Describe("ROSA HCP cluster autoscaler defaults", func() {
 			Entry("scale_down.utilization_threshold", HCPAutoscalerDefaultScaleDownUtilizationThreshold),
 			Entry("max_free_difference_ratio", HCPAutoscalerDefaultMaxFreeDifferenceRatio),
 		)
+	})
+
+	Context("kube client rate limiting", func() {
+		It("sets kube_client_qps between -1 and 1000", func() {
+			Expect(HCPAutoscalerDefaultKubeClientQPS).To(BeNumerically(">=", -1))
+			Expect(HCPAutoscalerDefaultKubeClientQPS).To(BeNumerically("<=", 1000))
+		})
+
+		It("sets kube_client_qps to a real sustained rate", func() {
+			// Both -1 and 0 are accepted by the CRD but are sentinels, not rates: -1 disables
+			// client side rate limiting and 0 falls back to the client-go default of 5 queries
+			// per second. Neither is a fleet default.
+			Expect(HCPAutoscalerDefaultKubeClientQPS).To(BeNumerically(">", 0))
+		})
+
+		It("sets kube_client_burst between 1 and 2000", func() {
+			Expect(HCPAutoscalerDefaultKubeClientBurst).To(BeNumerically(">=", 1))
+			Expect(HCPAutoscalerDefaultKubeClientBurst).To(BeNumerically("<=", 2000))
+		})
 	})
 
 	Context("expanders", func() {
