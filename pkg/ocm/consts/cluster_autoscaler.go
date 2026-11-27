@@ -47,7 +47,7 @@ const (
 
 	// HCPAutoscalerDefaultMaxFreeDifferenceRatio is the default maximum difference in free resources
 	// for two node groups to be considered similar (max_free_difference_ratio).
-	HCPAutoscalerDefaultMaxFreeDifferenceRatio = "0.1"
+	HCPAutoscalerDefaultMaxFreeDifferenceRatio = "0.05"
 
 	// HCPAutoscalerDefaultKubeClientQPS is the default maximum number of queries per second the
 	// autoscaler sends to the Kubernetes API server (kube_client_qps). Accepted values are between
