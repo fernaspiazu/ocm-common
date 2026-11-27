@@ -38,6 +38,9 @@ func (client *AWSClient) GetIAMPolicy(policyArn string) (*types.Policy, error) {
 		PolicyArn: &policyArn,
 	}
 	out, err := client.IamClient.GetPolicy(context.TODO(), input)
+	if err != nil {
+		return nil, err
+	}
 	return out.Policy, err
 }
 

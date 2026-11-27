@@ -74,6 +74,9 @@ func (client *AWSClient) GetRole(roleName string) (*types.Role, error) {
 		RoleName: &roleName,
 	}
 	out, err := client.IamClient.GetRole(context.TODO(), input)
+	if err != nil {
+		return nil, err
+	}
 	return out.Role, err
 }
 func (client *AWSClient) DeleteRole(roleName string) error {
@@ -119,6 +122,9 @@ func (client *AWSClient) DeleteRoleAndPolicy(roleName string, managedPolicy bool
 func (client *AWSClient) ListRoles() ([]types.Role, error) {
 	input := &iam.ListRolesInput{}
 	out, err := client.IamClient.ListRoles(context.TODO(), input)
+	if err != nil {
+		return nil, err
+	}
 	return out.Roles, err
 }
 

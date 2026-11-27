@@ -304,6 +304,9 @@ func (client *AWSClient) ListAvaliableRegionsFromAWS() ([]types.Region, error) {
 			filter,
 		},
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	return output.Regions, err
 }
